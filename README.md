@@ -50,9 +50,9 @@ pytest test
 - `notebooks/`: Contém notebooks Jupyter para experimentação e visualização.
 - `tests/`: Contém testes unitários para o código-fonte.
 
-## Referências
+## Referências gerais
 
-O código aqui presente é totalmente baseado nas seguintes referências:
+O código aqui presente é baseado nas seguintes referências:
 
 - Livro "Building Large Language from Scratch" de Sebastian Raschka.
 [Building Large Language Models from Scratch](https://www.amazon.com.br/Build-Large-Language-Model-Scratch/dp/B0DNR5SPQR)
@@ -62,3 +62,7 @@ O código aqui presente é totalmente baseado nas seguintes referências:
 - Stanford CS336 Language Modeling from Scratch Course: [youtube](https://www.youtube.com/playlist?list=PLoROMvodv4rOY23Y0BoGoBGgQ1zmU_MT_)
 
 - Material da aula: [material](https://stanford-cs336.github.io/spring2025/)
+
+- Playlist Understanding Large Language Model [youtube](https://www.youtube.com/playlist?list=PLUfbC589u-FSwnqsvTHXVcgmLg8UnbIy3)
+
+### Referências específicas
