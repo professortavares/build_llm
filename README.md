@@ -49,3 +49,16 @@ pytest test
 - `models/`: Contém os binários dos modelos pré-treinados.
 - `notebooks/`: Contém notebooks Jupyter para experimentação e visualização.
 - `tests/`: Contém testes unitários para o código-fonte.
+
+## Referências
+
+O código aqui presente é totalmente baseado nas seguintes referências:
+
+- Livro "Building Large Language from Scratch" de Sebastian Raschka.
+[Building Large Language Models from Scratch](https://www.amazon.com.br/Build-Large-Language-Model-Scratch/dp/B0DNR5SPQR)
+
+- Repositório oficial do livro no GitHub: [repo no github](https://github.com/rasbt/LLMs-from-scratch)
+
+- Stanford CS336 Language Modeling from Scratch Course: [youtube](https://www.youtube.com/playlist?list=PLoROMvodv4rOY23Y0BoGoBGgQ1zmU_MT_)
+
+- Material da aula: [material](https://stanford-cs336.github.io/spring2025/)
