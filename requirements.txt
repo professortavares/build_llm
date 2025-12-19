@@ -1,0 +1,5 @@
+jupyterlab==4.5.1
+ruff==0.14.10
+mypy==1.19.1
+pytest==9.0.2
+nbstripout==0.8.2

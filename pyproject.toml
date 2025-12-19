@@ -1,0 +1,45 @@
+[tool.ruff]
+line-length = 88
+
+# Inclui apenas o que queremos analisar
+include = [
+    "build_llm/**/*.py",
+    "test/**/*.py",
+    "notebooks/**/*.ipynb",
+]
+
+# Opcional: ignore todo o resto explicitamente
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "dist",
+    "build",
+]
+
+# Regras habilitadas
+lint.select = [
+    "E",   # pycodestyle
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # bugbear
+    "UP",  # pyupgrade
+]
+
+lint.ignore = [
+    "E501",
+]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+
+# Limitar onde o mypy roda
+files = [
+    "build_llm",
+    "test",
+]
+
