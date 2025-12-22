@@ -1,0 +1,7 @@
+jupyterlab
+matplotlib
+mypy
+nbstripout
+numpy
+pytest
+ruff

@@ -4,10 +4,11 @@ Este repositório contém um guia passo a passo para construir e treinar um mode
 usando Python e bibliotecas populares de aprendizado de máquina.
 
 ## Instalação
+**Observação:** testado em python 3.10.
 
-Certifique-se de ter Python 3.11 ou superior instalado. Em seguida, instale as dependências necessárias:
+Certifique-se de ter Python 3.10 ou superior instalado. Em seguida, instale as dependências necessárias:
 
-Crie o ambiente virtual:
+Crie o ambiente virtual (py env):
 ```bash
 python -m venv .venv
 ```
@@ -21,10 +22,21 @@ Ative o ambiente virtual (Windows):
 .venv\Scripts\activate
 ```
 
-Instale as bibliotecas necessárias:
+Instale as bibliotecas necessárias (apenas cpu / sem suporte gpu):
 ```bash
 pip install -r requirements.txt
 ```
+
+ou para instalações com gpu:
+```bash
+pip install torch==2.5.1+cu121 --extra-index-url https://download.pytorch.org/whl/cu121
+```
+Em seguida as demais dependências:
+```bash
+pip install -r requirements_gpu.txt
+```
+  
+
 Instale o projeto em modo de desenvolvimento:
 ```bash
 pip install -e .
@@ -66,3 +78,6 @@ O código aqui presente é baseado nas seguintes referências:
 - Playlist Understanding Large Language Model [youtube](https://www.youtube.com/playlist?list=PLUfbC589u-FSwnqsvTHXVcgmLg8UnbIy3)
 
 ### Referências específicas
+
+BPE: 
+* Philip Gage, A New Algorithm for Data Compression (1994) [artigo](https://www.derczynski.com/papers/archive/BPE_Gage.pdf)

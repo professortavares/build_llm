@@ -5,3 +5,4 @@ nbstripout==0.8.2
 numpy==2.4.0
 pytest==9.0.2
 ruff==0.14.10
+torch==2.9.1
