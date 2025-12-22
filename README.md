@@ -80,4 +80,7 @@ O código aqui presente é baseado nas seguintes referências:
 ### Referências específicas
 
 BPE: 
-* Philip Gage, A New Algorithm for Data Compression (1994) [artigo](https://www.derczynski.com/papers/archive/BPE_Gage.pdf)
+* Philip Gage: **A New Algorithm for Data Compression** (1994) [artigo](https://www.derczynski.com/papers/archive/BPE_Gage.pdf)
+
+Word2Vec:
+* Tomas Mikolov, Kai Chen, Greg Corrado, Jeffrey Dean: **Efficient Estimation of Word Representations in Vector Space** (2013) [artigo](https://arxiv.org/abs/1301.3781)
