@@ -47,7 +47,7 @@ pip install -e .
 Para garantir a qualidade do código, utilize as seguintes ferramentas:
 
 ```
-ruff check . --fix 
+ruff check . --fix --unsafe-fixes
 ruff format . 
 mypy 
 pytest test
