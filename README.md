@@ -64,14 +64,21 @@ pytest test
 
 ### Tabela de conteúdo:
 
-** Capítulo 02: Pré-processamento dos dados **
+**Capítulo 02: Pré-processamento dos dados**
 
 | Notebook | Descrição |
 |----------|-----------|
-| [Tokenizador simples](./notebooks/cap02/01%20-%20Tokenizador%20simples.ipynb) | Exploração inicial e visualização dos dados |
-| [Encoder simples](./notebooks/cap02/02%20-%20Encoder%20simples.ipynb) | Treinamento e avaliação do modelo |
-| [Encoder melhorado](./notebooks/cap02/03%20-%20Encoder%20melhorado.ipynb) | Limpeza e preparação dos dados |
-
+| [Tokenizador simples](./notebooks/cap02/01%20-%20Tokenizador%20simples.ipynb) | Implementa um **tokenizador simples**, convertendo texto em tokens e IDs numéricos. Serve como base para entender tokenização antes de abordagens mais avançadas. |
+| [Encoder simples](./notebooks/cap02/02%20-%20Encoder%20simples.ipynb) | Apresenta um **encoder simples**, transformando tokens em representações vetoriais numéricas. Introduz a ideia de embeddings como base para modelos de linguagem. | 
+| [Encoder melhorado](./notebooks/cap02/03%20-%20Encoder%20melhorado.ipynb) | Apresenta um **encoder melhorado**, adicionando refinamentos ao encoder simples para gerar representações mais robustas dos tokens. Explora melhorias práticas comuns em pipelines de processamento de texto. |
+| [BPE Tokenizer](./notebooks/cap02/04%20-%20BPE%20Tokenizer.ipynb) | Implementa um **tokenizador BPE (Byte Pair Encoding)**, uma técnica avançada de tokenização que combina subunidades de palavras para melhorar a eficiência e cobertura do vocabulário. |
+| [Perceptron](./notebooks/cap02/05%20-%20Perceptron.ipynb) | Introduz o **perceptron**, um modelo de rede neural simples usado para tarefas de classificação. Serve como base para entender conceitos fundamentais de redes neurais. |
+| [Redes neurais - MLP](./notebooks/cap02/06%20-%20Redes%20neurais%20-%20MLP.ipynb) | Apresenta **redes neurais feedforward (MLP)**, explorando arquiteturas mais complexas que o perceptron. Introduz conceitos de camadas ocultas e funções de ativação. |
+| [PyTorch MLP](./notebooks/cap02/07%20-%20PyTorch%20MLP.ipynb) | Implementa um **MLP usando PyTorch**, demonstrando como construir e treinar redes neurais com uma biblioteca popular de aprendizado de máquina. |
+| [CBoW](./notebooks/cap02/08%20-%20CBoW.ipynb) | Apresenta o modelo **Continuous Bag of Words (CBoW)**, uma técnica de modelagem de linguagem que prevê palavras com base no contexto circundante. |
+| [Pipeline BPE + CBoW](./notebooks/cap02/09%20-%20Pipeline%20BPE%20+%20CBoW.ipynb) | Combina o **tokenizador BPE com o modelo CBoW**, demonstrando um pipeline completo de pré-processamento e modelagem de linguagem. |
+| [Pipeline CBoW + Embedding PyTorch](./notebooks/cap02/10%20-%20Pipeline%20CBoW%20+%20Embedding%20PyTorch.ipynb) | Integra o **modelo CBoW com embeddings do PyTorch**, mostrando como utilizar embeddings pré-treinados em um pipeline de modelagem de linguagem. |
+| [Pipeline com tokens positions](./notebooks/cap02/11%20-%20Pipeline%20com%20tokens%20positions.ipynb) | Adiciona **informações de posição dos tokens** ao pipeline, permitindo que o modelo capture a ordem das palavras no texto. |
 
 
 ## Referências gerais
