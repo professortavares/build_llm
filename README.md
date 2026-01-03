@@ -57,7 +57,7 @@ pytest test
 
 - `build_llm/`: Contém o código-fonte para construição e treinamento do LLM.
 - `data/`: Contém os arquivos de dados que serão utilizados para treinar o LLM.
-- imagens/: Contém imagens relacionadas ao projeto.
+- `imagens/`: Contém imagens relacionadas ao projeto.
 - `models/`: Contém os binários dos modelos pré-treinados.
 - `notebooks/`: Contém notebooks Jupyter para experimentação e visualização.
 - `tests/`: Contém testes unitários para o código-fonte.
