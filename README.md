@@ -62,6 +62,17 @@ pytest test
 - `notebooks/`: Contém notebooks Jupyter para experimentação e visualização.
 - `tests/`: Contém testes unitários para o código-fonte.
 
+### Tabela de conteúdo:
+
+** Capítulo 02: Pré-processamento dos dados **
+
+| Notebook | Descrição |
+|----------|-----------|
+| [Tokenizador simples](./notebooks/01 - Tokenizador simples.ipynb) | Exploração inicial e visualização dos dados |
+| [Encoder simples](./notebooks/02 - Encoder simples.ipynb) | Treinamento e avaliação do modelo |
+| [Encoder melhorado](./notebooks/03 - Encoder melhorado.ipynb) | Limpeza e preparação dos dados |
+
+
 ## Referências gerais
 
 O código aqui presente é baseado nas seguintes referências:
