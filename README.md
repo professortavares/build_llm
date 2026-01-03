@@ -68,9 +68,10 @@ pytest test
 
 | Notebook | Descrição |
 |----------|-----------|
-| [Tokenizador simples](./notebooks/01 - Tokenizador simples.ipynb) | Exploração inicial e visualização dos dados |
-| [Encoder simples](./notebooks/02 - Encoder simples.ipynb) | Treinamento e avaliação do modelo |
-| [Encoder melhorado](./notebooks/03 - Encoder melhorado.ipynb) | Limpeza e preparação dos dados |
+| [Tokenizador simples](./notebooks/01%20-%20Tokenizador%20simples.ipynb) | Exploração inicial e visualização dos dados |
+| [Encoder simples](./notebooks/02%20-%20Encoder%20simples.ipynb) | Treinamento e avaliação do modelo |
+| [Encoder melhorado](./notebooks/03%20-%20Encoder%20melhorado.ipynb) | Limpeza e preparação dos dados |
+
 
 
 ## Referências gerais
