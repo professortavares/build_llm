@@ -84,3 +84,6 @@ BPE:
 
 Word2Vec:
 * Tomas Mikolov, Kai Chen, Greg Corrado, Jeffrey Dean: **Efficient Estimation of Word Representations in Vector Space** (2013) [artigo](https://arxiv.org/abs/1301.3781)
+
+Attention Is All You Need:
+* Ashish Vaswani and Noam Shazeer and Niki Parmar and Jakob Uszkoreit and Llion Jones and Aidan N. Gomez and Lukasz Kaiser and Illia Polosukhin **Attention Is All You Need** (2023) [artigo](https://arxiv.org/abs/1706.03762)
