@@ -40,6 +40,8 @@ def treinar_cbow(
     if device is None:
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
+    print(f"Treinando CBOW no dispositivo: {device}")
+
     model = CBOWTorch(vocab_size=vocab_size, embedding_dim=embedding_dim).to(device)
     opt = optim.SGD(model.parameters(), lr=lr)
     loss_fn = nn.CrossEntropyLoss()
@@ -63,7 +65,7 @@ def treinar_cbow(
 
         if ep == 1 or ep % 10 == 0:
             loss_med = loss_total / max(1, len(loader))
-            print(f"Época {ep:03d}/{epocas} | loss médio: {loss_med:.4f}")
+            print(f"[{device}] Época {ep:03d}/{epocas} | loss médio: {loss_med:.4f}")
 
     return model
 
@@ -128,3 +130,44 @@ def criar_camadas_embedding_para_gpt(
         token_embedding_layer.weight.data.copy_(w.to(device))
 
     return token_embedding_layer, pos_embedding_layer
+
+
+def gerar_input_embeddings_com_posicao(
+    token_ids: torch.Tensor,
+    *,
+    token_embedding_layer: nn.Embedding,
+    pos_embedding_layer: nn.Embedding,
+) -> torch.Tensor:
+    """
+    Gera os embeddings de entrada para um GPT somando:
+        input_embeddings = token_embeddings + pos_embeddings
+
+    Parâmetros:
+    ----------
+    token_ids : torch.Tensor
+        Tensor de IDs de tokens com shape (T,) ou (B, T).
+    token_embedding_layer : nn.Embedding
+        Camada de embedding de tokens.
+    pos_embedding_layer : nn.Embedding
+        Camada de embedding de posições (tamanho >= T).
+
+    Retorno:
+    -------
+    torch.Tensor
+        Embeddings somados com shape (B, T, D) (ou (1, T, D) se entrada for (T,)).
+    """
+    if token_ids.dim() == 1:
+        token_ids = token_ids.unsqueeze(0)  # (1, T)
+    if token_ids.dim() != 2:
+        raise ValueError(f"token_ids deve ter shape (T,) ou (B, T). Recebido: {tuple(token_ids.shape)}")
+
+    bsz, seq_len = token_ids.shape
+    device = token_ids.device
+
+    token_embeddings = token_embedding_layer(token_ids)  # (B, T, D)
+
+    pos_ids = torch.arange(seq_len, device=device)       # (T,)
+    pos_embeddings = pos_embedding_layer(pos_ids)        # (T, D)
+    pos_embeddings = pos_embeddings.unsqueeze(0).expand(bsz, seq_len, -1)  # (B, T, D)
+
+    return token_embeddings + pos_embeddings
