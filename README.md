@@ -118,3 +118,7 @@ Attention Is All You Need:
 
 Arquitetura LLM / GPT-2:
 * Alec Radford, Jeffrey Wu, Rewon Child, David Luan, Dario Amodei, Ilya Sutskever: **Language Models are Unsupervised Multitask Learners** (2019) [artigo](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf)
+
+Layer Normalization:
+* Jimmy Lei Ba and Jamie Ryan Kiros and Geoffrey E. Hinton **Layer Normalization** (2016) [artigo](https://arxiv.org/abs/1607.06450)
+
