@@ -122,3 +122,6 @@ Arquitetura LLM / GPT-2:
 Layer Normalization:
 * Jimmy Lei Ba and Jamie Ryan Kiros and Geoffrey E. Hinton **Layer Normalization** (2016) [artigo](https://arxiv.org/abs/1607.06450)
 
+Gaussian Error Linear Units (GELUs):
+* Dan Hendrycks and Kevin Gimpel **Gaussian Error Linear Units (GELUs)** (2016) [artigo](https://arxiv.org/abs/1606.08415)
+
