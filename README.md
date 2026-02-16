@@ -89,6 +89,15 @@ pytest test
 | 3 | [Camada de atenção causal](./notebooks/cap03/03%20-%20Self%20Attention%20-%20Hidding%20future%20words.ipynb) | Implementa uma **camada de atenção causal**, garantindo que o modelo não tenha acesso a informações futuras ao fazer previsões, essencial para tarefas de geração de texto. |
 | 4 | [Multi-Head Attention](./notebooks/cap03/04%20-%20Multi-head%20attention.ipynb)                              | Apresenta o **mecanismo de Multi-Head Attention**, permitindo que o modelo capture múltiplas relações contextuais simultaneamente para melhorar a compreensão do texto.     |
 
+**Capítulo 04: Arquitetura GPT**
+
+| # | Notebook                                                                  | Descrição                                                                                                                                                                     |
+|---|---------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1 | [LLM architecture](./notebooks/cap04/01%20-%20LLM%20architecture.ipynb)   | Apresenta o esqueleto de uma arquitetura GPT/LLM (config + validação + blocos Transformer/LayerNorm dummy) para entender o fluxo e as shapes antes da implementação completa. |
+| 2 | [Layer Norm](./notebooks/cap04/02%20-%20Layer%20Norm.ipynb) | Implementa o Layer Normalization, mostrando o cálculo de média/desvio por embedding e como isso estabiliza o treinamento em Transformers.                                     | 
+| 3 | [GELU activations](./notebooks/cap04/03%20-%20GELU%20activations.ipynb) | Apresenta a função de ativação GELU, explicando sua formulação e vantagens em comparação com a RELU.                                                                          |
+| 4 | [Transformer Block](./notebooks/cap04/04%20-%20Transformer%20Block.ipynb) | Implementa um bloco Transformer completo, integrando atenção multi-head, feedforward e normalização para construir a base de um modelo GPT.                                      |
+| 5 | [GPT Model](./notebooks/cap04/05%20-%20GPT%20Model.ipynb) | Constrói o modelo GPT completo, integrando múltiplos blocos Transformer e camadas de saída para criar um modelo de linguagem funcional.                                            |
 
 ## Referências gerais
 
