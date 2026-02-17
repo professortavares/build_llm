@@ -273,3 +273,63 @@ def create_dataloader_v1(
         return dataloader
     except Exception as e:
         raise RuntimeError("Falha ao criar o DataLoader.") from e
+
+def text_to_token_ids(text: str, tokenizer) -> torch.Tensor:
+    """
+    Converte um texto em IDs de tokens e retorna um tensor (com dimensão de batch).
+
+    Parâmetros:
+    ----------
+    text : str
+        Texto de entrada a ser tokenizado.
+    tokenizer : Any
+        Tokenizer compatível com a API do `tiktoken` (precisa ter `.encode`).
+
+    Retorno:
+    -------
+    torch.Tensor
+        Tensor com shape (1, seq_len), contendo os IDs de tokens.
+
+    Exceções:
+    --------
+    Levanta TypeError se `text` não for string.
+    Levanta RuntimeError se falhar ao codificar o texto.
+    """
+    if not isinstance(text, str):
+        raise TypeError("O parâmetro `text` deve ser do tipo str.")
+
+    try:
+        encoded = tokenizer.encode(text, allowed_special={"<|endoftext|>"})
+        return torch.tensor(encoded, dtype=torch.long).unsqueeze(0)  # adiciona batch
+    except Exception as e:
+        raise RuntimeError("Falha ao converter texto em token IDs.") from e
+
+
+def token_ids_to_text(token_ids: torch.Tensor, tokenizer) -> str:
+    """
+    Converte um tensor de IDs de tokens (com dimensão de batch) de volta para texto.
+
+    Parâmetros:
+    ----------
+    token_ids : torch.Tensor
+        Tensor com shape (1, seq_len) (ou compatível) contendo IDs de tokens.
+    tokenizer : Any
+        Tokenizer compatível com a API do `tiktoken` (precisa ter `.decode`).
+
+    Retorno:
+    -------
+    str
+        Texto decodificado.
+
+    Exceções:
+    --------
+    Levanta TypeError se `token_ids` não for um torch.Tensor.
+    Levanta ValueError se o tensor estiver vazio.
+    """
+    if not isinstance(token_ids, torch.Tensor):
+        raise TypeError("O parâmetro `token_ids` deve ser um torch.Tensor.")
+    if token_ids.numel() == 0:
+        raise ValueError("`token_ids` não pode estar vazio.")
+
+    flat = token_ids.squeeze(0)  # remove batch
+    return tokenizer.decode(flat.tolist())
