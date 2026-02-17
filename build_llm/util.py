@@ -274,6 +274,7 @@ def create_dataloader_v1(
     except Exception as e:
         raise RuntimeError("Falha ao criar o DataLoader.") from e
 
+
 def text_to_token_ids(text: str, tokenizer) -> torch.Tensor:
     """
     Converte um texto em IDs de tokens e retorna um tensor (com dimensão de batch).
