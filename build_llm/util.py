@@ -1,13 +1,8 @@
+import tiktoken
 import torch
 import torch.nn as nn
-from torch.utils.data import DataLoader
-import tiktoken
-from typing import List, Tuple
-
 from torch import Tensor
-from torch.utils.data import Dataset
-
-
+from torch.utils.data import DataLoader, Dataset
 
 
 def generate_text_simple(
@@ -91,6 +86,7 @@ def generate_text_simple(
 
     return idx
 
+
 class GPTDatasetV1(Dataset):
     """
     Dataset para treino de modelos estilo GPT usando janelas deslizantes (sliding window).
@@ -136,12 +132,12 @@ class GPTDatasetV1(Dataset):
         if stride <= 0:
             raise ValueError("`stride` deve ser maior que zero.")
 
-        self.input_ids: List[Tensor] = []
-        self.target_ids: List[Tensor] = []
+        self.input_ids: list[Tensor] = []
+        self.target_ids: list[Tensor] = []
 
         # Tokeniza o texto completo
         try:
-            token_ids: List[int] = tokenizer.encode(
+            token_ids: list[int] = tokenizer.encode(
                 txt,
                 allowed_special={"<|endoftext|>"},
             )
@@ -178,7 +174,7 @@ class GPTDatasetV1(Dataset):
         """
         return len(self.input_ids)
 
-    def __getitem__(self, idx: int) -> Tuple[Tensor, Tensor]:
+    def __getitem__(self, idx: int) -> tuple[Tensor, Tensor]:
         """
         Retorna o par (input_ids, target_ids) para o índice `idx`.
 
@@ -198,6 +194,7 @@ class GPTDatasetV1(Dataset):
             raise IndexError("Índice fora do intervalo do dataset.")
 
         return self.input_ids[idx], self.target_ids[idx]
+
 
 def create_dataloader_v1(
     txt: str,

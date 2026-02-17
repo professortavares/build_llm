@@ -1,9 +1,11 @@
 from typing import Any
+
 import torch
 import torch.nn as nn
 
-from build_llm.transformer import TransformerBlock
 from build_llm.layer import LayerNorm
+from build_llm.transformer import TransformerBlock
+
 
 class GPTModel(nn.Module):
     """
