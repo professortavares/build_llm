@@ -1,7 +1,8 @@
 jupyterlab
 matplotlib
-mypy
-nbstripout
 numpy
+pandas
 pytest
 ruff
+tiktoken
+wikipedia
