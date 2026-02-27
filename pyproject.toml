@@ -4,6 +4,7 @@ line-length = 88
 # Inclui apenas o que queremos analisar
 include = [
     "build_llm/**/*.py",
+    "scripts/**/*.py",
     "test/**/*.py",
     "notebooks/**/*.ipynb",
 ]
