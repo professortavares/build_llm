@@ -15,6 +15,103 @@ from torch.utils.data import DataLoader
 
 from build_llm.util import generate_text_simple, text_to_token_ids, token_ids_to_text
 
+_CHECKPOINT_RE = re.compile(r"^(?P<prefix>.+)_part_(?P<epoch>\d+)\.pth$")
+
+def _find_latest_checkpoint(
+    checkpoint_dir: str | os.PathLike,
+    checkpoint_prefix: str,
+) -> Path | None:
+    """
+    Encontra o checkpoint mais recente no diretório, baseado no sufixo _part_XX.pth.
+    Retorna o Path do arquivo, ou None se não houver.
+    """
+    ckpt_dir = Path(checkpoint_dir).expanduser().resolve()
+    if not ckpt_dir.exists():
+        return None
+
+    best_epoch = -1
+    best_path: Path | None = None
+
+    for p in ckpt_dir.glob(f"{checkpoint_prefix}_part_*.pth"):
+        m = _CHECKPOINT_RE.match(p.name)
+        if not m:
+            continue
+        if m.group("prefix") != checkpoint_prefix:
+            continue
+
+        epoch_num = int(m.group("epoch"))
+        if epoch_num > best_epoch:
+            best_epoch = epoch_num
+            best_path = p
+
+    return best_path
+
+
+def _save_checkpoint(
+    part_path: str | os.PathLike,
+    *,
+    model: nn.Module,
+    optimizer: Optimizer,
+    completed_epochs: int,
+    global_step: int,
+    tokens_seen: int,
+    train_losses: list[float],
+    val_losses: list[float],
+    track_tokens_seen: list[int],
+    latest_name: str = "latest.pth",
+) -> None:
+    """
+    Salva um checkpoint por época (part_XX) e também um atalho 'latest.pth'
+    no mesmo diretório, sempre com o conteúdo mais recente.
+    """
+    part_path = Path(part_path).expanduser().resolve()
+    part_path.parent.mkdir(parents=True, exist_ok=True)
+
+    payload: dict[str, Any] = {
+        "completed_epochs": int(completed_epochs),
+        "global_step": int(global_step),
+        "tokens_seen": int(tokens_seen),
+        "train_losses": list(train_losses),
+        "val_losses": list(val_losses),
+        "track_tokens_seen": list(track_tokens_seen),
+        "model_state_dict": model.state_dict(),
+        "optimizer_state_dict": optimizer.state_dict(),
+    }
+
+    # 1) salva o checkpoint por época
+    torch.save(payload, str(part_path))
+
+    # 2) salva/atualiza o atalho latest.pth (mesmo conteúdo)
+    latest_path = part_path.parent / latest_name
+    torch.save(payload, str(latest_path))
+
+def _load_checkpoint(
+    path: str | os.PathLike,
+    *,
+    model: nn.Module,
+    optimizer: Optimizer,
+    device: torch.device,
+) -> dict[str, Any]:
+    """
+    Carrega checkpoint e restaura model/optimizer.
+    Retorna o dicionário com os metadados (completed_epochs, losses, etc).
+    """
+    ckpt_path = Path(path).expanduser().resolve()
+    payload = torch.load(str(ckpt_path), map_location=device)
+
+    if "model_state_dict" not in payload or "optimizer_state_dict" not in payload:
+        raise ValueError(f"Checkpoint inválido (faltam chaves) em: {ckpt_path}")
+
+    model.load_state_dict(payload["model_state_dict"])
+    optimizer.load_state_dict(payload["optimizer_state_dict"])
+
+    # Garante que tensores internos do optimizer fiquem no device correto
+    for state in optimizer.state.values():
+        for k, v in state.items():
+            if torch.is_tensor(v):
+                state[k] = v.to(device)
+
+    return payload
 
 def _slugify_filename(name: str, max_len: int = 120) -> str:
     """
@@ -567,37 +664,74 @@ def train_model_simple(
     eval_iter: int,
     start_context: str,
     tokenizer,
+    *,
+    checkpoint_dir: str | os.PathLike = "./models/partial",
+    checkpoint_prefix: str = "full_model",
+    resume_if_possible: bool = True,
 ) -> tuple[list[float], list[float], list[int]]:
     """
     Treina o modelo e avalia periodicamente, registrando perdas e tokens vistos.
 
+    NOVO:
+    - Salva checkpoint ao final de cada época em checkpoint_dir:
+        {checkpoint_prefix}_part_XX.pth  (XX = número da época completa)
+    - Se resume_if_possible=True, procura o último checkpoint e retoma automaticamente.
+
     Retorno:
     -------
-    tuple[list[float], list[float], list[int]]
-        (train_losses, val_losses, track_tokens_seen)
+    (train_losses, val_losses, track_tokens_seen)
     """
-    # Inicializa listas para acompanhar perdas e tokens vistos
+
+    # ---- Estado inicial (novo): tentar retomar do último checkpoint ----
     train_losses: list[float] = []
     val_losses: list[float] = []
     track_tokens_seen: list[int] = []
 
     tokens_seen = 0
     global_step = -1
+    start_epoch_idx = 0  # índice 0-based
 
-    # Loop principal de treinamento
-    for epoch in range(num_epochs):
-        model.train()  # Coloca o modelo em modo de treino
+    if resume_if_possible:
+        latest = _find_latest_checkpoint(checkpoint_dir, checkpoint_prefix)
+        if latest is not None:
+            payload = _load_checkpoint(
+                latest,
+                model=model,
+                optimizer=optimizer,
+                device=device,
+            )
+
+            completed_epochs = int(payload.get("completed_epochs", 0))
+            # Se o arquivo é part_05 => completed_epochs=5 => próxima época é a 6 (índice 5)
+            start_epoch_idx = completed_epochs
+
+            global_step = int(payload.get("global_step", -1))
+            tokens_seen = int(payload.get("tokens_seen", 0))
+
+            train_losses = list(payload.get("train_losses", []))
+            val_losses = list(payload.get("val_losses", []))
+            track_tokens_seen = list(payload.get("track_tokens_seen", []))
+
+            print(
+                f"[RESUME] Checkpoint encontrado: {latest.name} | "
+                f"épocas completas={completed_epochs} -> retomando na época {completed_epochs + 1}"
+            )
+        else:
+            print("[RESUME] Nenhum checkpoint encontrado. Iniciando do zero.")
+
+    # ---- Loop principal de treinamento ----
+    for epoch_idx in range(start_epoch_idx, num_epochs):
+        model.train()
 
         for input_batch, target_batch in train_loader:
-            optimizer.zero_grad()  # Zera os gradientes acumulados do batch anterior
+            optimizer.zero_grad()
             loss = calc_loss_batch(input_batch, target_batch, model, device)
-            loss.backward()  # Calcula os gradientes da loss
-            optimizer.step()  # Atualiza os pesos do modelo usando os gradientes
+            loss.backward()
+            optimizer.step()
 
             tokens_seen += input_batch.numel()
             global_step += 1
 
-            # Etapa opcional de avaliação
             if global_step % eval_freq == 0:
                 train_loss, val_loss = evaluate_model(
                     model=model,
@@ -611,17 +745,36 @@ def train_model_simple(
                 track_tokens_seen.append(tokens_seen)
 
                 print(
-                    f"Ep {epoch + 1} (Step {global_step:06d}): "
+                    f"Ep {epoch_idx + 1} (Step {global_step:06d}): "
                     f"Train loss {train_loss:.3f}, Val loss {val_loss:.3f}"
                 )
 
-        # Imprime um texto de exemplo ao final de cada época
+        # Texto de exemplo no fim da época
         generate_and_print_sample(
             model=model,
             tokenizer=tokenizer,
             device=device,
             start_context=start_context,
         )
+
+        # ---- NOVO: salva checkpoint ao final de cada época ----
+        completed_epochs = epoch_idx + 1  # 1..N (épocas COMPLETAS)
+        ckpt_name = f"{checkpoint_prefix}_part_{completed_epochs:02d}.pth"
+        ckpt_path = Path(checkpoint_dir).expanduser().resolve() / ckpt_name
+
+        _save_checkpoint(
+            ckpt_path,
+            model=model,
+            optimizer=optimizer,
+            completed_epochs=completed_epochs,
+            global_step=global_step,
+            tokens_seen=tokens_seen,
+            train_losses=train_losses,
+            val_losses=val_losses,
+            track_tokens_seen=track_tokens_seen,
+        )
+        print(f"[CHECKPOINT] Salvo: {ckpt_path}")
+        print(f"[CHECKPOINT] Atualizado: {ckpt_path.parent / 'latest.pth'}")
 
     return train_losses, val_losses, track_tokens_seen
 

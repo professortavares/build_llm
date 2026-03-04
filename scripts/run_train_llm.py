@@ -217,8 +217,11 @@ def main():
         eval_iter=5,
         start_context="Uma noite destas, vindo da cidade para o",
         tokenizer=tokenizer,
+        checkpoint_dir="./models/partial",
+        checkpoint_prefix="full_model",
+        resume_if_possible=True,
     )
-
+    
     # Calcula e exibe o tempo total de execução
     end_time = time.time()
     execution_time_minutes = (end_time - start_time) / 60
