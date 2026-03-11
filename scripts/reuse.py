@@ -13,6 +13,8 @@ from torch import nn
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 
+import time
+
 from build_llm.util import generate_text_simple, text_to_token_ids, token_ids_to_text
 
 _CHECKPOINT_RE = re.compile(r"^(?P<prefix>.+)_part_(?P<epoch>\d+)\.pth$")
@@ -686,6 +688,7 @@ def train_model_simple(
     train_losses: list[float] = []
     val_losses: list[float] = []
     track_tokens_seen: list[int] = []
+    epoch_times: list[float] = []
 
     tokens_seen = 0
     global_step = -1
@@ -721,6 +724,7 @@ def train_model_simple(
 
     # ---- Loop principal de treinamento ----
     for epoch_idx in range(start_epoch_idx, num_epochs):
+        epoch_start_time = time.time()
         model.train()
 
         for input_batch, target_batch in train_loader:
@@ -749,7 +753,16 @@ def train_model_simple(
                     f"Train loss {train_loss:.3f}, Val loss {val_loss:.3f}"
                 )
 
-        # Texto de exemplo no fim da época
+        epoch_end_time = time.time()
+        epoch_duration = epoch_end_time - epoch_start_time
+        epoch_times.append(epoch_duration)
+
+        print(
+            f"[TEMPO] Época {epoch_idx + 1} concluída em "
+            f"{epoch_duration:.2f} segundos "
+            f"({epoch_duration / 60:.2f} minutos)."
+        )
+
         generate_and_print_sample(
             model=model,
             tokenizer=tokenizer,

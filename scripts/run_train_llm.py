@@ -56,20 +56,20 @@ def baixar_livros():
 def preprocessar_livros():
     # realiza o pré-processamento dos livros (removendo cabeçalho e rodapé) usando os cortes definidos abaixo
     cortes = {
-        "a_mao_e_a_luva.txt": (56, 8818),
-        "dom_casmurro.txt": (56, 17460),
-        "esau_e_jacob.txt": (62, 18606),
-        "helena.txt": (70, 14418),
-        "historias_sem_data.txt": (68, 11484),
-        "memorial_de_ayres.txt": (66, 12538),
-        "memorias_posthumas_de_braz_cubas.txt": (54, 16934),
-        "os_trabalhadores_do_mar.txt": (76, 32728),
-        "papeis_avulsos.txt": (74, 12956),
-        "poesias_completas.txt": (66, 21160),
-        "queda_que_as_mulheres_tem_para_os_tolos.txt": (82, 1112),
-        "quincas_borba.txt": (56, 20960),
-        "reliquias_de_casa_velha.txt": (118, 16344),
-        "yaya_garcia.txt": (70, 13900),
+        "a_mao_e_a_luva.txt": (27, 4410),
+        "dom_casmurro.txt": (28, 8732),
+        "esau_e_jacob.txt": (31, 8305),
+        "helena.txt": (35, 7210),
+        "historias_sem_data.txt": (27, 5743),
+        "memorial_de_ayres.txt": (28, 6270),
+        "memorias_posthumas_de_braz_cubas.txt": (27, 8469),
+        "os_trabalhadores_do_mar.txt": (38, 16365),
+        "papeis_avulsos.txt": (37, 6480),
+        "poesias_completas.txt": (33, 10582),
+        "queda_que_as_mulheres_tem_para_os_tolos.txt": (41, 557),
+        "quincas_borba.txt": (28, 10482),
+        "reliquias_de_casa_velha.txt": (54, 8174),
+        "yaya_garcia.txt": (35, 6951),
     }
 
     saidas = preprocessar_livros_gutenberg_por_linha(
@@ -132,7 +132,7 @@ def main():
 
     GPT_CONFIG_124M: dict[str, Any] = {
         "vocab_size": 50257,  # Tamanho do vocabulário
-        "context_length": 1024,  # Comprimento do contexto
+        "context_length": 256,  # Comprimento do contexto
         "emb_dim": 768,  # Dimensão do embedding
         "n_heads": 12,  # Número de cabeças de atenção
         "n_layers": 12,  # Número de camadas
@@ -205,7 +205,7 @@ def main():
     # Inicializa o tokenizer (encoding compatível com GPT-2)
     tokenizer = tiktoken.get_encoding("gpt2")
 
-    num_epochs = 10
+    num_epochs = 50
     train_losses, val_losses, tokens_seen = train_model_simple(
         model=model,
         train_loader=train_loader,
